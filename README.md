@@ -39,6 +39,9 @@ module.exports = {
 - `root` : root directory that will be use to display relative paths instead of absolute ones (see below)
 
 With root
+
 ![With root](images/with-root.png)
+
 Without root
+
 ![Without root](images/without-root.png)
