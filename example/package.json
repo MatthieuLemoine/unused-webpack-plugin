@@ -1,0 +1,15 @@
+{
+  "name": "example",
+  "version": "1.0.0",
+  "description": "A webpack plugin to find unused modules i.e source files",
+  "main": "index.js",
+  "repository": "https://github.com/MatthieuLemoine/unused-webpack-plugin",
+  "author": "MatthieuLemoine",
+  "license": "MIT",
+  "scripts": {
+    "build": "webpack"
+  },
+  "devDependencies": {
+    "webpack": "^3.6.0"
+  }
+}
