@@ -1,13 +1,14 @@
 {
   "name": "unused-webpack-plugin",
   "version": "1.0.0",
-  "description": "A webpack plugin to find unused modules i.e source files",
+  "description": "A webpack plugin to find unused modules/source files",
   "main": "index.js",
   "repository": "https://github.com/MatthieuLemoine/unused-webpack-plugin",
   "author": "MatthieuLemoine",
   "license": "MIT",
   "scripts": {
-    "pretty": "prettier-eslint --single-quote --trailing-comma es5 --write \"**/*.js\" \"**/*.json\"",
+    "pretty":
+      "prettier-eslint --single-quote --trailing-comma es5 --write \"**/*.js\" \"**/*.json\"",
     "lint": "eslint index.js"
   },
   "devDependencies": {
