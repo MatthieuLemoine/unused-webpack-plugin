@@ -19,6 +19,7 @@ module.exports = {
       exclude: ['*.test.js'],
       // Root directory (optional)
       root: __dirname,
+      failOnUnused: true
     }),
   ],
 };
