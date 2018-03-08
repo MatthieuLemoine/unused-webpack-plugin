@@ -37,6 +37,7 @@ module.exports = {
 - `directories` : array of directories where to look for unused source files.
 - `exclude` : array of exclude patterns when looking for unused source files.
 - `root` : root directory that will be use to display relative paths instead of absolute ones (see below)
+- `failOnUnused`: whether or not the build should fail if unused files are found (defaults to `false`)
 
 With root
 

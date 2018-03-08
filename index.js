@@ -6,6 +6,7 @@ function UnusedPlugin(options) {
   this.sourceDirectories = options.directories || [];
   this.exclude = options.exclude || [];
   this.root = options.root;
+  this.failOnUnused = options.failOnUnused || false;
 }
 
 UnusedPlugin.prototype.apply = function(compiler) {
@@ -32,12 +33,23 @@ UnusedPlugin.prototype.apply = function(compiler) {
           files.map(array => array.filter(file => !usedModules[file]))
         )
         .then(display.bind(this))
+        .then(continueOrFail.bind(this, this.failOnUnused, compilation))
         .then(callback);
     }.bind(this)
   );
 };
 
 module.exports = UnusedPlugin;
+
+function continueOrFail(failOnUnused, compilation, allFiles) {
+  if (allFiles && allFiles.length > 0) {
+    if (failOnUnused) {
+      compilation.errors.push(new Error("Unused files found"));
+    } else {
+      compilation.warnings.push(new Error("Unused files found"));
+    }
+  }
+}
 
 function display(filesByDirectory) {
   const allFiles = filesByDirectory.reduce(
@@ -65,4 +77,6 @@ function display(filesByDirectory) {
     );
   });
   process.stdout.write(chalk.green('\n*** Unused Plugin ***\n\n'));
+
+  return allFiles;
 }
