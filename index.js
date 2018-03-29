@@ -14,7 +14,7 @@ UnusedPlugin.prototype.apply = function(compiler) {
     'emit',
     function(compilation, callback) {
       // Files used by Webpack during compilation
-      const usedModules = compilation.fileDependencies
+      const usedModules = Array.from(compilation.fileDependencies)
         .filter(file =>
           this.sourceDirectories.some(dir => file.indexOf(dir) !== -1)
         )
