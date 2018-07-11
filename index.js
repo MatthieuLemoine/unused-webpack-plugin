@@ -10,8 +10,8 @@ function UnusedPlugin(options) {
 }
 
 UnusedPlugin.prototype.apply = function(compiler) {
-  compiler.plugin(
-    'emit',
+  compiler.hooks.emit.tapAsync(
+    'UnusedPlugin',
     function(compilation, callback) {
       // Files used by Webpack during compilation
       const usedModules = Array.from(compilation.fileDependencies)
@@ -44,9 +44,9 @@ module.exports = UnusedPlugin;
 function continueOrFail(failOnUnused, compilation, allFiles) {
   if (allFiles && allFiles.length > 0) {
     if (failOnUnused) {
-      compilation.errors.push(new Error("Unused files found"));
+      compilation.errors.push(new Error('Unused files found'));
     } else {
-      compilation.warnings.push(new Error("Unused files found"));
+      compilation.warnings.push(new Error('Unused files found'));
     }
   }
 }
