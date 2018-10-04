@@ -1,5 +1,4 @@
 const path = require('path');
-const recursive = require('recursive-readdir');
 const chalk = require('chalk');
 const { searchFiles } = require('./lib/utils')
 
