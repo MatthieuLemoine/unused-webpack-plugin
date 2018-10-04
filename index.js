@@ -10,33 +10,40 @@ function UnusedPlugin(options) {
 }
 
 UnusedPlugin.prototype.apply = function(compiler) {
-  compiler.hooks.emit.tapAsync(
-    'UnusedPlugin',
-    function(compilation, callback) {
-      // Files used by Webpack during compilation
-      const usedModules = Array.from(compilation.fileDependencies)
-        .filter(file =>
-          this.sourceDirectories.some(dir => file.indexOf(dir) !== -1)
-        )
-        .reduce((obj, item) => {
-          obj[item] = true;
-          return obj;
-        }, {});
-      // Go through sourceDirectories to find all source files
-      Promise.all(
-        this.sourceDirectories.map(directory =>
-          recursive(directory, this.exclude)
-        )
+  const checkUnused =     (compilation, callback) => {
+    // Files used by Webpack during compilation
+    const usedModules = Array.from(compilation.fileDependencies)
+      .filter(file =>
+        this.sourceDirectories.some(dir => file.indexOf(dir) !== -1)
       )
-        // Find unused source files
-        .then(files =>
-          files.map(array => array.filter(file => !usedModules[file]))
-        )
-        .then(display.bind(this))
-        .then(continueOrFail.bind(this, this.failOnUnused, compilation))
-        .then(callback);
-    }.bind(this)
-  );
+      .reduce((obj, item) => {
+        obj[item] = true;
+        return obj;
+      }, {});
+    // Go through sourceDirectories to find all source files
+    Promise.all(
+      this.sourceDirectories.map(directory =>
+        recursive(directory, this.exclude)
+      )
+    )
+      // Find unused source files
+      .then(files =>
+        files.map(array => array.filter(file => !usedModules[file]))
+      )
+      .then(display.bind(this))
+      .then(continueOrFail.bind(this, this.failOnUnused, compilation))
+      .then(callback);
+  }
+  // webpack 4
+  if (compiler.hooks && compiler.hooks.emit) {
+    compiler.hooks.emit.tapAsync(
+      'UnusedPlugin',
+      checkUnused
+    );
+  // webpack 3
+  } else {
+    compiler.plugin('emit', checkUnused)
+  }
 };
 
 module.exports = UnusedPlugin;
