@@ -3,7 +3,7 @@ const recursive = require('../lib/utils').searchFiles
 
 const dirToSearch = path.resolve(__dirname, 'testdir')
 
-describe('play', () => {
+describe('dirToSearch()', () => {
   it('list all directories', async () => {
     const dirs = await recursive(dirToSearch)
     const expected = [
