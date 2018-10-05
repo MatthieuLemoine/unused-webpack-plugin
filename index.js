@@ -1,6 +1,6 @@
 const path = require('path');
-const recursive = require('recursive-readdir');
 const chalk = require('chalk');
+const { searchFiles } = require('./lib/utils')
 
 function UnusedPlugin(options) {
   this.sourceDirectories = options.directories || [];
@@ -23,7 +23,7 @@ UnusedPlugin.prototype.apply = function(compiler) {
     // Go through sourceDirectories to find all source files
     Promise.all(
       this.sourceDirectories.map(directory =>
-        recursive(directory, this.exclude)
+        searchFiles(directory, this.exclude)
       )
     )
       // Find unused source files
