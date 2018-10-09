@@ -1,6 +1,6 @@
 {
   "name": "unused-webpack-plugin",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "A webpack plugin to find unused modules/source files",
   "main": "index.js",
   "repository": "https://github.com/MatthieuLemoine/unused-webpack-plugin",
@@ -8,17 +8,26 @@
   "license": "MIT",
   "scripts": {
     "pretty": "prettier-eslint --single-quote --trailing-comma es5 --write \"**/*.js\" \"**/*.json\"",
-    "lint": "eslint index.js"
+    "lint": "eslint index.js",
+    "test": "jest"
   },
   "devDependencies": {
     "babel-eslint": "^8.0.1",
     "eslint": "^4.8.0",
+    "jest": "^23.6.0",
     "prettier": "^1.7.4",
     "prettier-eslint": "^8.2.0",
     "prettier-eslint-cli": "^4.4.0"
   },
   "dependencies": {
     "chalk": "^2.1.0",
+    "micromatch": "^3.1.10",
     "recursive-readdir": "^2.2.1"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "<rootDir>/example/"
+    ]
   }
 }

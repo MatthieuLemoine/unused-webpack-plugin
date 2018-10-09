@@ -46,3 +46,7 @@ With root
 Without root
 
 ![Without root](images/without-root.png)
+
+## Related
+
+If you're not using webpack, check out [remnants](https://github.com/MatthieuLemoine/remnants).
