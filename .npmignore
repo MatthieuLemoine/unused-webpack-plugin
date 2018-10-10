@@ -1,0 +1,11 @@
+node_modules
+__tests__
+.circleci
+.git
+examples
+.eslintignore
+.eslintrc
+.gitignore
+.prettierignore
+.prettierrc
+jest.js
