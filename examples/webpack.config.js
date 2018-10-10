@@ -16,10 +16,10 @@ module.exports = {
         path.join(__dirname, 'simple-module'),
       ],
       // Exclude patterns
-      exclude: ['*.test.js'],
+      exclude: ['**/*.test.js'],
       // Root directory (optional)
       root: __dirname,
-      failOnUnused: true,
+      failOnUnused: false,
     }),
   ],
 };
