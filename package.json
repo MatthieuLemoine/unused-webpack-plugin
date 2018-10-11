@@ -25,8 +25,7 @@
   },
   "dependencies": {
     "chalk": "^2.1.0",
-    "micromatch": "^3.1.10",
-    "recursive-readdir": "^2.2.1"
+    "deglob": "^3.1.0"
   },
   "husky": {
     "hooks": {

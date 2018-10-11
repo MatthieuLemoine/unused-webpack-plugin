@@ -7,6 +7,7 @@ function UnusedPlugin(options) {
   this.exclude = options.exclude || [];
   this.root = options.root;
   this.failOnUnused = options.failOnUnused || false;
+  this.useGitIgnore = options.useGitIgnore || true;
 }
 
 UnusedPlugin.prototype.apply = function apply(compiler) {
@@ -23,7 +24,7 @@ UnusedPlugin.prototype.apply = function apply(compiler) {
       );
     // Go through sourceDirectories to find all source files
     Promise.all(
-      this.sourceDirectories.map(directory => searchFiles(directory, this.exclude)),
+      this.sourceDirectories.map(directory => searchFiles(directory, this.exclude, this.useGitIgnore)),
     )
       // Find unused source files
       .then(files => files.map(array => array.filter(file => !usedModules[file])))
