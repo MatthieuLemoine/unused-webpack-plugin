@@ -1,4 +1,4 @@
-# UnusedWebpackPlugin
+# UnusedWebpackPlugin [![CircleCI](https://circleci.com/gh/MatthieuLemoine/unused-webpack-plugin.svg?style=svg)](https://circleci.com/gh/MatthieuLemoine/unused-webpack-plugin)
 
 A webpack plugin to find unused modules/source files.
 
@@ -18,18 +18,18 @@ const UnusedWebpackPlugin = require('unused-webpack-plugin');
 
 module.exports = {
   // webpack configuration
-  plugins : [
+  plugins: [
     ...otherPlugins,
     new UnusedWebpackPlugin({
       // Source directories
-      directories : [path.join(__dirname, 'src')],
+      directories: [path.join(__dirname, 'src')],
       // Exclude patterns
-      exclude     : ['*.test.js',],
+      exclude: ['*.test.js'],
       // Root directory (optional)
-      root : __dirname,
+      root: __dirname,
     }),
   ],
-}
+};
 ```
 
 ## Options
@@ -38,6 +38,7 @@ module.exports = {
 - `exclude` : array of exclude patterns when looking for unused source files.
 - `root` : root directory that will be use to display relative paths instead of absolute ones (see below)
 - `failOnUnused`: whether or not the build should fail if unused files are found (defaults to `false`)
+- `useGitIgnore`: whether or not to respect `.gitignore` file (defaults to `true`)
 
 With root
 

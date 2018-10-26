@@ -1,16 +1,15 @@
 {
-  "parser": "babel-eslint",
-  "extends": "eslint:recommended",
-  "env": {
-    "node": true,
-    "es6": true
+  "extends": ["airbnb-base"],
+  "parserOptions": {
+    "ecmaVersion": 9
   },
-  "overrides": [
-    {
-      "files": [ "*.test.js" ],
-      "env": {
-        "jest": true
-      }
-    }
-  ]
+  "env": {
+    "jest": true,
+    "node": true
+  },
+  "rules": {
+    "no-underscore-dangle": 0,
+    "no-use-before-define": ["error", { "functions": false, "classes": true, "variables": true }],
+    "max-len": 0
+  }
 }
