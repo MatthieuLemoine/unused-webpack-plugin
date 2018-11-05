@@ -1,6 +1,6 @@
 {
   "name": "unused-webpack-plugin",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "A webpack plugin to find unused modules/source files",
   "main": "index.js",
   "repository": "https://github.com/MatthieuLemoine/unused-webpack-plugin",
