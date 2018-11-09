@@ -15,13 +15,7 @@ UnusedPlugin.prototype.apply = function apply(compiler) {
     // Files used by Webpack during compilation
     const usedModules = Array.from(compilation.fileDependencies)
       .filter(file => this.sourceDirectories.some(dir => file.indexOf(dir) !== -1))
-      .reduce(
-        (obj, item) => ({
-          ...obj,
-          [item]: true,
-        }),
-        {},
-      );
+      .reduce((obj, item) => Object.assign(obj, { [item]: true }), {});
     // Go through sourceDirectories to find all source files
     Promise.all(
       this.sourceDirectories.map(directory => searchFiles(directory, this.exclude, this.useGitIgnore)),
