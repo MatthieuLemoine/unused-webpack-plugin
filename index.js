@@ -61,6 +61,7 @@ function display(filesByDirectory) {
     chalk.red(`${allFiles.length} unused source files found.\n`),
   );
   filesByDirectory.forEach((files, index) => {
+    if (files.length === 0) return;
     const directory = this.sourceDirectories[index];
     const relative = this.root
       ? path.relative(this.root, directory)
