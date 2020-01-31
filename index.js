@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
 const { searchFiles } = require('./lib/utils');
@@ -8,6 +9,7 @@ function UnusedPlugin(options) {
   this.root = options.root;
   this.failOnUnused = options.failOnUnused || false;
   this.useGitIgnore = options.useGitIgnore || true;
+  this.outputFilePath = options.outputFilePath;
 }
 
 UnusedPlugin.prototype.apply = function apply(compiler) {
@@ -55,6 +57,11 @@ function display(filesByDirectory) {
   if (!allFiles.length) {
     return [];
   }
+
+  let outputString = `## Unused Files
+${allFiles.length} unused source files found.
+`;
+
   process.stdout.write('\n');
   process.stdout.write(chalk.green('\n*** Unused Plugin ***\n'));
   process.stdout.write(
@@ -66,12 +73,27 @@ function display(filesByDirectory) {
     const relative = this.root
       ? path.relative(this.root, directory)
       : directory;
+
     process.stdout.write(chalk.blue(`\n● ${relative}\n`));
-    files.forEach(file => process.stdout.write(
-      chalk.yellow(`    • ${path.relative(directory, file)}\n`),
-    ));
+    outputString += `\n### ${relative}\n`;
+
+    files.forEach(file => {
+      process.stdout.write(
+        chalk.yellow(`    • ${path.relative(directory, file)}\n`),
+      )
+      outputString += `  - ${path.relative(directory, file)}\n`;
+    });
   });
   process.stdout.write(chalk.green('\n*** Unused Plugin ***\n\n'));
+
+  if (this.outputFilePath) {
+    fs.writeFile(
+      this.outputFilePath,
+      outputString,
+      'utf8',
+      err => console.warn(err)
+    );
+  }
 
   return allFiles;
 }
