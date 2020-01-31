@@ -27,6 +27,8 @@ module.exports = {
       exclude: ['*.test.js'],
       // Root directory (optional)
       root: __dirname,
+      // Export file path (optional)
+      outputFilePath: path.resolve(__dirname, 'UNUSED_FILES.MD'),
     }),
   ],
 };
@@ -39,6 +41,7 @@ module.exports = {
 - `root` : root directory that will be use to display relative paths instead of absolute ones (see below)
 - `failOnUnused`: whether or not the build should fail if unused files are found (defaults to `false`)
 - `useGitIgnore`: whether or not to respect `.gitignore` file (defaults to `true`)
+- `outputFilePath`: Full path to the file where you want the results be printed to.
 
 With root
 
