@@ -22,7 +22,7 @@ UnusedPlugin.prototype.apply = function apply(compiler) {
     )
       // Find unused source files
       .then(files => files.map(array => array.filter(file => !usedModules[file])))
-      .then(display.bind(this))
+      .then(display.bind(this, compilation))
       .then(continueOrFail.bind(this, this.failOnUnused, compilation))
       .then(callback);
   };
@@ -47,7 +47,11 @@ function continueOrFail(failOnUnused, compilation, allFiles) {
   }
 }
 
-function display(filesByDirectory) {
+function display(compilation, filesByDirectory) {
+  const log = compilation.getLogger
+    ? msg => compilation.getLogger('UnusedPlugin').warn(msg)
+    : msg => process.stdout.write(chalk.red(`UnusedPlugin: ${msg}\n`));
+
   const allFiles = filesByDirectory.reduce(
     (array, item) => array.concat(item),
     [],
@@ -55,23 +59,16 @@ function display(filesByDirectory) {
   if (!allFiles.length) {
     return [];
   }
-  process.stdout.write('\n');
-  process.stdout.write(chalk.green('\n*** Unused Plugin ***\n'));
-  process.stdout.write(
-    chalk.red(`${allFiles.length} unused source files found.\n`),
-  );
+  log(`${allFiles.length} unused source files found.`);
   filesByDirectory.forEach((files, index) => {
     if (files.length === 0) return;
     const directory = this.sourceDirectories[index];
     const relative = this.root
       ? path.relative(this.root, directory)
       : directory;
-    process.stdout.write(chalk.blue(`\n● ${relative}\n`));
-    files.forEach(file => process.stdout.write(
-      chalk.yellow(`    • ${path.relative(directory, file)}\n`),
-    ));
+    log(`● ${relative}`);
+    files.forEach(file => log(`    • ${path.relative(directory, file)}`));
   });
-  process.stdout.write(chalk.green('\n*** Unused Plugin ***\n\n'));
 
   return allFiles;
 }
