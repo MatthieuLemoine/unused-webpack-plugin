@@ -50,7 +50,7 @@ function continueOrFail(failOnUnused, compilation, allFiles) {
 function display(compilation, filesByDirectory) {
   const log = compilation.getLogger
     ? msg => compilation.getLogger('UnusedPlugin').warn(msg)
-    : msg => process.stdout.write(chalk.red(`UnusedPlugin: ${msg}\n`));
+    : msg => process.stderr.write(chalk.red(`UnusedPlugin: ${msg}\n`));
 
   const allFiles = filesByDirectory.reduce(
     (array, item) => array.concat(item),
