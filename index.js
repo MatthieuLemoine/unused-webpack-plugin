@@ -77,22 +77,17 @@ ${allFiles.length} unused source files found.
     process.stdout.write(chalk.blue(`\n● ${relative}\n`));
     outputString += `\n### ${relative}\n`;
 
-    files.forEach(file => {
+    files.forEach((file) => {
       process.stdout.write(
         chalk.yellow(`    • ${path.relative(directory, file)}\n`),
-      )
+      );
       outputString += `  - ${path.relative(directory, file)}\n`;
     });
   });
   process.stdout.write(chalk.green('\n*** Unused Plugin ***\n\n'));
 
   if (this.outputFilePath) {
-    fs.writeFile(
-      this.outputFilePath,
-      outputString,
-      'utf8',
-      err => console.warn(err)
-    );
+    fs.writeFile(this.outputFilePath, outputString, 'utf8');
   }
 
   return allFiles;
