@@ -39,6 +39,7 @@ module.exports = {
 - `root` : root directory that will be use to display relative paths instead of absolute ones (see below)
 - `failOnUnused`: whether or not the build should fail if unused files are found (defaults to `false`)
 - `useGitIgnore`: whether or not to respect `.gitignore` file (defaults to `true`)
+- `outputFile`: if specified, unused files will be output to this file, instead of the console
 
 With root
 

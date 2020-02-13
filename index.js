@@ -8,6 +8,7 @@ function UnusedPlugin(options) {
   this.root = options.root;
   this.failOnUnused = options.failOnUnused || false;
   this.useGitIgnore = options.useGitIgnore || true;
+  this.outputFile = options.outputFile || null;
 }
 
 UnusedPlugin.prototype.apply = function apply(compiler) {
@@ -22,7 +23,7 @@ UnusedPlugin.prototype.apply = function apply(compiler) {
     )
       // Find unused source files
       .then(files => files.map(array => array.filter(file => !usedModules[file])))
-      .then(display.bind(this))
+      .then(outputDuplicatedFiles.bind(this, compilation))
       .then(continueOrFail.bind(this, this.failOnUnused, compilation))
       .then(callback);
   };
@@ -47,7 +48,7 @@ function continueOrFail(failOnUnused, compilation, allFiles) {
   }
 }
 
-function display(filesByDirectory) {
+function outputDuplicatedFiles(compilation, filesByDirectory) {
   const allFiles = filesByDirectory.reduce(
     (array, item) => array.concat(item),
     [],
@@ -55,23 +56,53 @@ function display(filesByDirectory) {
   if (!allFiles.length) {
     return [];
   }
+
+  if (this.outputFile) {
+    emitDuplicatedFiles(compilation, this.outputFile, allFiles);
+  } else {
+    logDuplicatedFiles(
+      allFiles,
+      filesByDirectory,
+      this.sourceDirectories,
+      this.root,
+    );
+  }
+
+  return allFiles;
+}
+
+function emitDuplicatedFiles(compilation, outputFile, allFiles) {
+  const output = allFiles.join('\n');
+
+  // eslint-disable-next-line no-param-reassign
+  compilation.assets[outputFile] = {
+    source: () => output,
+    size: () => output.length,
+  };
+}
+
+function logDuplicatedFiles(
+  allFiles,
+  filesByDirectory,
+  sourceDirectories,
+  root,
+) {
   process.stdout.write('\n');
   process.stdout.write(chalk.green('\n*** Unused Plugin ***\n'));
   process.stdout.write(
     chalk.red(`${allFiles.length} unused source files found.\n`),
   );
+
   filesByDirectory.forEach((files, index) => {
     if (files.length === 0) return;
-    const directory = this.sourceDirectories[index];
-    const relative = this.root
-      ? path.relative(this.root, directory)
-      : directory;
+    const directory = sourceDirectories[index];
+    const relative = root ? path.relative(root, directory) : directory;
+
     process.stdout.write(chalk.blue(`\n● ${relative}\n`));
     files.forEach(file => process.stdout.write(
       chalk.yellow(`    • ${path.relative(directory, file)}\n`),
     ));
   });
-  process.stdout.write(chalk.green('\n*** Unused Plugin ***\n\n'));
 
-  return allFiles;
+  process.stdout.write(chalk.green('\n*** Unused Plugin ***\n\n'));
 }
