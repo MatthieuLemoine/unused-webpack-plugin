@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 const chalk = require('chalk');
 const { searchFiles } = require('./lib/utils');
 
@@ -8,6 +9,7 @@ function UnusedPlugin(options) {
   this.root = options.root;
   this.failOnUnused = options.failOnUnused || false;
   this.useGitIgnore = options.useGitIgnore || true;
+  this.remove = options.remove || false;
 }
 
 UnusedPlugin.prototype.apply = function apply(compiler) {
@@ -23,6 +25,7 @@ UnusedPlugin.prototype.apply = function apply(compiler) {
       // Find unused source files
       .then(files => files.map(array => array.filter(file => !usedModules[file])))
       .then(display.bind(this))
+      .then(remove.bind(this))
       .then(continueOrFail.bind(this, this.failOnUnused, compilation))
       .then(callback);
   };
@@ -71,6 +74,30 @@ function display(filesByDirectory) {
       chalk.yellow(`    • ${path.relative(directory, file)}\n`),
     ));
   });
+
+  return allFiles;
+}
+
+function remove(allFiles) {
+  if (!allFiles.length) {
+    return [];
+  }
+  if (!this.remove) {
+    process.stdout.write(chalk.green('\n*** Unused Plugin ***\n\n'));
+    return allFiles;
+  }
+  let deleteCount = allFiles.length;
+  allFiles.forEach((file) => {
+    try {
+      fs.unlinkSync(file);
+    } catch (error) {
+      process.stdout.write(
+        chalk.red(`Error removing file ${path.relative(process.cwd(), file)}\n`),
+      );
+      deleteCount -= 1;
+    }
+  });
+  process.stdout.write(chalk.green(`\n🔥 ${deleteCount} files deleted.\n`));
   process.stdout.write(chalk.green('\n*** Unused Plugin ***\n\n'));
 
   return allFiles;
