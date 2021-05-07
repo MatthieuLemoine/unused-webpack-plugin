@@ -27,6 +27,8 @@ module.exports = {
       exclude: ['*.test.js'],
       // Root directory (optional)
       root: __dirname,
+      // Don't remove unused files automatically
+      remove: false,
     }),
   ],
 };
@@ -39,6 +41,7 @@ module.exports = {
 - `root` : root directory that will be use to display relative paths instead of absolute ones (see below)
 - `failOnUnused`: whether or not the build should fail if unused files are found (defaults to `false`)
 - `useGitIgnore`: whether or not to respect `.gitignore` file (defaults to `true`)
+- `remove`: whether or not to remove unused files automatically (defaults to `false`)
 
 With root
 
